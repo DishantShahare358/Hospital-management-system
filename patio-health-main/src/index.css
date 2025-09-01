@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Vibrant medical theme colors */
+    --background: 210 25% 96%;
+    --foreground: 210 20% 8%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 20% 8%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 20% 8%;
+
+    /* Electric medical blue primary */
+    --primary: 210 90% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 210 90% 65%;
+    --primary-dark: 210 90% 35%;
+
+    /* Vibrant medical green secondary */
+    --secondary: 160 85% 42%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 160 85% 58%;
+
+    --muted: 210 20% 92%;
+    --muted-foreground: 210 20% 45%;
+
+    /* Bright accent cyan */
+    --accent: 190 95% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 90% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 25% 85%;
+    --input: 210 25% 90%;
+    --ring: 210 90% 50%;
+
+    /* Enhanced vibrant gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(210 90% 50%), hsl(190 95% 55%));
+    --gradient-secondary: linear-gradient(135deg, hsl(160 85% 42%), hsl(180 80% 48%));
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+    --gradient-hero: linear-gradient(135deg, hsl(210 90% 50%) 0%, hsl(190 95% 55%) 50%, hsl(160 85% 42%) 100%);
+    
+    /* Enhanced glassmorphism */
+    --glass-bg: rgba(255, 255, 255, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    
+    /* Enhanced shadows */
+    --shadow-soft: 0 8px 25px rgba(33, 150, 243, 0.15);
+    --shadow-glass: 0 12px 40px rgba(31, 38, 135, 0.4);
+    --shadow-glow: 0 0 30px rgba(33, 150, 243, 0.3);
+    
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 210 30% 6%;
+    --foreground: 210 20% 98%;
+
+    --card: 210 25% 10%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 210 25% 10%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 210 95% 70%;
+    --primary-foreground: 210 30% 6%;
+    --primary-light: 210 95% 80%;
+    --primary-dark: 210 95% 55%;
+
+    --secondary: 160 90% 60%;
+    --secondary-foreground: 210 30% 6%;
+    --secondary-light: 160 90% 75%;
+
+    --muted: 210 25% 12%;
+    --muted-foreground: 210 20% 70%;
+
+    --accent: 190 100% 65%;
+    --accent-foreground: 210 30% 6%;
+
+    --destructive: 0 95% 65%;
+    --destructive-foreground: 210 30% 6%;
+
+    --border: 210 25% 18%;
+    --input: 210 25% 12%;
+    --ring: 210 95% 70%;
+
+    /* Enhanced dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(210 95% 70%), hsl(190 100% 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(160 90% 60%), hsl(180 85% 65%));
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    --gradient-hero: linear-gradient(135deg, hsl(210 95% 70%) 0%, hsl(190 100% 65%) 50%, hsl(160 90% 60%) 100%);
+    
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    
+    --shadow-soft: 0 8px 25px rgba(33, 150, 243, 0.25);
+    --shadow-glass: 0 12px 40px rgba(31, 38, 135, 0.6);
+    --shadow-glow: 0 0 30px rgba(33, 150, 243, 0.4);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-secondary {
+    background: var(--gradient-secondary);
+  }
+  
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-glass {
+    box-shadow: var(--shadow-glass);
+  }
+}
