@@ -1,9 +1,11 @@
 import { useAuth } from '@/contexts/AuthContext';
-import AdminDashboard from '@/components/dashboards/AdminDashboard';
-import DoctorDashboard from '@/components/dashboards/DoctorDashboard';
-import NurseDashboard from '@/components/dashboards/NurseDashboard';
-import PatientDashboard from '@/components/dashboards/PatientDashboard';
-import EmployeeDashboard from '@/components/dashboards/EmployeeDashboard';
+import AdminDashboard from '@/pages/admin/AdminDashboard';
+import DoctorDashboard from '@/pages/doctor/DoctorDashboard';
+import NurseDashboard from '@/pages/nurse/NurseDashboard';
+import ReceptionistDashboard from '@/pages/receptionist/ReceptionistDashboard';
+import PatientDashboard from '@/pages/patient/PatientDashboard';
+import LabTechnicianDashboard from '@/pages/lab/LabTechnicianDashboard';
+import DashboardLayout from '@/components/DashboardLayout';
 
 const Dashboard = () => {
   const { state } = useAuth();
@@ -16,11 +18,26 @@ const Dashboard = () => {
     admin: AdminDashboard,
     doctor: DoctorDashboard,
     nurse: NurseDashboard,
+    receptionist: ReceptionistDashboard,
     patient: PatientDashboard,
-    employee: EmployeeDashboard,
+    lab_technician: LabTechnicianDashboard,
   }[state.user.role];
 
-  return <DashboardComponent />;
+  if (!DashboardComponent) {
+    return (
+      <DashboardLayout>
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">Dashboard not available for this role.</p>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  return (
+    <DashboardLayout>
+      <DashboardComponent />
+    </DashboardLayout>
+  );
 };
 
 export default Dashboard;

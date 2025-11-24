@@ -22,9 +22,15 @@ import {
   Calendar,
   FileText,
   Activity,
-  Bell
+  Bell,
+  Moon,
+  Sun,
+  ClipboardList,
+  CreditCard,
+  MessageCircle
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTheme } from 'next-themes';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -34,6 +40,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { state, logout } = useAuth();
   const location = useLocation();
+  const { theme, setTheme } = useTheme();
 
   const getNavigationItems = () => {
     const baseItems = [
@@ -44,36 +51,51 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       case 'admin':
         return [
           ...baseItems,
-          { icon: Users, label: 'Users', href: '/admin/users' },
+          { icon: Users, label: 'Staff Management', href: '/admin/staff' },
           { icon: Calendar, label: 'Appointments', href: '/admin/appointments' },
           { icon: Activity, label: 'Analytics', href: '/admin/analytics' },
+          { icon: CreditCard, label: 'Billing', href: '/admin/billing' },
         ];
       case 'doctor':
         return [
           ...baseItems,
           { icon: Users, label: 'Patients', href: '/doctor/patients' },
           { icon: Calendar, label: 'Appointments', href: '/doctor/appointments' },
-          { icon: FileText, label: 'Records', href: '/doctor/records' },
+          { icon: FileText, label: 'Medical Records', href: '/doctor/records' },
+          { icon: ClipboardList, label: 'Lab Requests', href: '/doctor/lab-requests' },
         ];
       case 'nurse':
         return [
           ...baseItems,
-          { icon: Users, label: 'Patients', href: '/nurse/patients' },
-          { icon: Activity, label: 'Vitals', href: '/nurse/vitals' },
+          { icon: Users, label: 'Assigned Patients', href: '/nurse/patients' },
+          { icon: Activity, label: 'Vital Signs', href: '/nurse/vitals' },
+          { icon: Calendar, label: 'Medication Schedule', href: '/nurse/medications' },
           { icon: FileText, label: 'Notes', href: '/nurse/notes' },
+        ];
+      case 'receptionist':
+        return [
+          ...baseItems,
+          { icon: Calendar, label: 'Appointments', href: '/receptionist/appointments' },
+          { icon: Users, label: 'Check-in/Check-out', href: '/receptionist/checkin' },
+          { icon: Activity, label: 'Room Allocation', href: '/receptionist/rooms' },
+          { icon: Users, label: 'Visitors', href: '/receptionist/visitors' },
         ];
       case 'patient':
         return [
           ...baseItems,
           { icon: Calendar, label: 'Appointments', href: '/patient/appointments' },
-          { icon: Users, label: 'Doctors', href: '/patient/doctors' },
-          { icon: FileText, label: 'Records', href: '/patient/records' },
+          { icon: FileText, label: 'Medical Records', href: '/patient/records' },
+          { icon: Activity, label: 'Lab Results', href: '/patient/lab-results' },
+          { icon: CreditCard, label: 'Billing', href: '/patient/billing' },
+          { icon: MessageCircle, label: 'Messages', href: '/patient/messages' },
         ];
-      case 'employee':
+      case 'lab_technician':
         return [
           ...baseItems,
-          { icon: Users, label: 'Patients', href: '/employee/patients' },
-          { icon: Calendar, label: 'Appointments', href: '/employee/appointments' },
+          { icon: ClipboardList, label: 'Test Requests', href: '/lab/requests' },
+          { icon: Activity, label: 'In Progress', href: '/lab/in-progress' },
+          { icon: FileText, label: 'Completed Tests', href: '/lab/completed' },
+          { icon: Activity, label: 'Sample Tracking', href: '/lab/tracking' },
         ];
       default:
         return baseItems;
@@ -151,16 +173,20 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  Profile
+                <DropdownMenuItem className="cursor-pointer" asChild>
+                  <Link to="/profile">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                <DropdownMenuItem className="cursor-pointer" asChild>
+                  <Link to="/settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>
@@ -191,8 +217,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 {state.user?.role === 'admin' && 'Admin Dashboard'}
                 {state.user?.role === 'doctor' && 'Doctor Dashboard'}
                 {state.user?.role === 'nurse' && 'Nurse Dashboard'}
+                {state.user?.role === 'receptionist' && 'Receptionist Dashboard'}
                 {state.user?.role === 'patient' && 'Patient Portal'}
-                {state.user?.role === 'employee' && 'Staff Dashboard'}
+                {state.user?.role === 'lab_technician' && 'Lab Technician Dashboard'}
               </h1>
               <p className="text-sm text-muted-foreground">
                 Welcome back, {state.user?.name}!
@@ -201,6 +228,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </div>
 
           <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="hover:bg-primary/10"
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5 text-foreground" /> : <Moon className="h-5 w-5 text-foreground" />}
+            </Button>
             <Button variant="ghost" size="icon" className="hover:bg-primary/10">
               <Bell className="h-5 w-5 text-foreground" />
             </Button>
@@ -218,16 +253,20 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem className="hover:bg-primary/10">
-                  <User className="mr-2 h-4 w-4" />
-                  Profile
+                <DropdownMenuItem className="hover:bg-primary/10 cursor-pointer" asChild>
+                  <Link to="/profile">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-primary/10">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                <DropdownMenuItem className="hover:bg-primary/10 cursor-pointer" asChild>
+                  <Link to="/settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="hover:bg-destructive/10 text-destructive">
+                <DropdownMenuItem onClick={handleLogout} className="hover:bg-destructive/10 text-destructive cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>

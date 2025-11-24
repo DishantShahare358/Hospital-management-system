@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'doctor' | 'nurse' | 'patient' | 'employee';
+export type UserRole = 'admin' | 'doctor' | 'nurse' | 'receptionist' | 'patient' | 'lab_technician';
 
 export interface User {
   id: string;
@@ -30,4 +30,5 @@ export interface RegisterData {
   specialization?: string;
   department?: string;
   phone?: string;
+  dateOfBirth?: string;
 }
