@@ -11,7 +11,7 @@
     }
   ],
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/:path*", "destination": "/index.html", "missing": [{ "type": "file" }] }
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html", "missing": [{ "type": "file" }] }
   ]
 }
